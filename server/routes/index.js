@@ -10,10 +10,14 @@ module.exports = function() {
 
     // home page 
     router.get('/', (req, res) => {
-        res.render('index', {
+        var travelsPromise = Travels.findAll({limit:3});
+        var testimonialsPromise = Testimonials.findAll({limit:3});
+        Promise.all([travelsPromise, testimonialsPromise]).then((results) => res.render('index', {
             pageTitle: 'Home',
-            className: 'home'
-        });
+            className: 'home',
+            travels: results[0],
+            testimonials: results [1]
+        }));
     });
 
     // about us
