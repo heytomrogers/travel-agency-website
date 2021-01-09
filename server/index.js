@@ -30,11 +30,13 @@ app.set('views', path.join(__dirname, './views'));
 // load the public assets folder
 app.use(express.static('public'));
 
-// get the current year
+// get the current year and page
 app.use((req, res, next) => {
     const date = new Date();
     res.locals.currentYear = date.getFullYear();
-    // console.log(res.locals);
+    // take the current page
+    res.locals.currentPage = req.path;
+
     return next(); 
 });
 
