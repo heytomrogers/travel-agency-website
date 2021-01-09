@@ -10,14 +10,22 @@ module.exports = function() {
 
     // home page 
     router.get('/', (req, res) => {
-        var travelsPromise = Travels.findAll({limit:3});
-        var testimonialsPromise = Testimonials.findAll({limit:3});
-        Promise.all([travelsPromise, testimonialsPromise]).then((results) => res.render('index', {
+
+        const promises = [];
+
+        promises.push( Travels.findAll({limit:3}) );
+        promises.push( Testimonials.findAll({limit:3}) );
+
+        // pass to promise
+        const result = Promise.all(promises);
+
+        result.then((result) => res.render('index', {
             pageTitle: 'Home',
             className: 'home',
-            travels: results[0],
-            testimonials: results [1]
-        }));
+            travels: result[0],
+            testimonials: result[1]
+        }))
+        .catch(err => console.log(err));
     });
 
     // about us
